@@ -16,7 +16,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
       >
         <div>
           <span className="font-semibold">Your AI Prompt</span>
-          <input
+          <textarea
             value={post.prompt}
             onChange={(e) => {
               setPost({ ...post, prompt: e.target.value });
@@ -30,7 +30,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
           <span className="font-semibold">
             Tag <span className="font-normal">(#product, #web, #idea)</span>
           </span>
-          <input
+          <textarea
             value={post.tag}
             onChange={(e) => {
               setPost({ ...post, tag: e.target.value });
@@ -49,7 +49,7 @@ const Form = ({ type, post, setPost, submitting, handleSubmit }) => {
             disabled={submitting}
             className="bg-primary-orange text-white rounded-full py-2 px-5"
           >
-            Create
+            {type}
           </button>
         </div>
       </form>

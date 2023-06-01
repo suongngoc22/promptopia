@@ -3,41 +3,64 @@
 import React, { useEffect, useState } from "react";
 import PromptCard from "./PromptCard";
 
-const PromptCardList = ({ data, handleTagClick }) => {
+const PromptCardList = ({ data, handleTagClick, searchText }) => {
   return (
     <div className="mt-16 prompt_layout">
-      {data.map((post) => (
-        <PromptCard key={post.id} post={post} handleTagClick={handleTagClick} />
-      ))}
+      {data
+        .filter((post) => {
+          return searchText.toLowerCase() === ""
+            ? post
+            : post.prompt.toLowerCase().includes(searchText) ||
+                post.tag.toLowerCase().includes(searchText) ||
+                post.creator.username.toLowerCase().includes(searchText);
+        })
+        .map((post) => (
+          <PromptCard
+            key={post._id}
+            post={post}
+            handleTagClick={handleTagClick}
+          />
+        ))}
     </div>
   );
 };
 
 const Feed = () => {
-  const [search, setSearch] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await fetch("/api/prompt");
-      const jsonData = await response.json();
+      const data = await response.json();
+      setPosts(data);
     };
+    fetchPosts();
+    console.log(posts);
   }, []);
 
-  const handleSearch = (e) => {};
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
+  };
 
   return (
-    <div>
-      <form>
+    <section className="feed">
+      <form className="w-full">
         <input
           type="text"
           placeholder="Search for a tag or a username"
-          value={search}
-          onChange={handleSearch}
-          className="text-sm py-4 px-4 outline-none w-full"
+          value={searchText}
+          required
+          onChange={handleSearchChange}
+          className="search_input peer"
         />
       </form>
-    </div>
+      <PromptCardList
+        data={posts}
+        handleTagClick={() => {}}
+        searchText={searchText}
+      />
+    </section>
   );
 };
 

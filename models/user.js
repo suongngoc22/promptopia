@@ -1,19 +1,22 @@
 import { Schema, model, models } from "mongoose";
 
 const UserSchema = new Schema({
-    email: {
-        type: String,
-        unique: [true, 'Email already exists!'],
-        require: [true, 'Email is require!']
-    },
-    username: {
-        type: String,
-        required: [true, 'Username is required!'],
-        match: [/^(?=[a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/, "Username invalid, it should contain 8-20 alphanumeric letters and be unique!"]
-    },
-    Image: {
-        type: String,
-    }
+  email: {
+    type: String,
+    unique: [true, "Email already exists!"],
+    require: [true, "Email is require!"],
+  },
+  username: {
+    type: String,
+    required: [true, "Username is required!"],
+    match: [
+      /^(?=[a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
+      "Username invalid, it should contain 8-20 alphanumeric letters and be unique!",
+    ],
+  },
+  image: {
+    type: String,
+  },
 });
 
 const User = models.User || model("User", UserSchema);

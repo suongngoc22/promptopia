@@ -6,50 +6,46 @@ import User from "@models/user";
 
 // handle authentication
 const handler = NextAuth({
-    providers: [
-        GoogleProvider({
-            clientId: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        })    
-    ],
-    callbacks: {
-        async session({ session }) {
-            const sessionUser = await User.findOne({
-                email: session.user.email
-            })
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+  ],
+  callbacks: {
+    async session({ session }) {
+      const sessionUser = await User.findOne({
+        email: session.user.email,
+      });
 
-            //update its id
-            session.user.id = sessionUser._id.toString();
+      //update its id
+      session.user.id = sessionUser._id.toString();
 
-            return session;
-        },
-        async signIn({ profile }) {
-            console.log(profile);
-            try {
-                await connectToDB();
+      return session;
+    },
+    async signIn({ profile }) {
+      try {
+        await connectToDB();
+        // check if a user already exists
+        const userExists = await User.findOne({
+          email: profile.email,
+        });
 
-                // check if a user already exists
-                const userExists = await User.findOne({
-                    email: profile.email
-                });
-
-                // if not, create a new user
-                if(!userExists) {
-                    await User.create({
-                        email: profile.email,
-                        username: profile.name.replaceAll(" ", "").
-                        toLowerCase(),
-                        image: profile.picture
-                    })
-                }
-
-                return true;
-            } catch (error) {
-                console.log(error);
-                return false;
-            }
+        // if not, create a new user
+        if (!userExists) {
+          await User.create({
+            email: profile.email,
+            username: profile.name.replaceAll(" ", "").toLowerCase(),
+            image: profile.picture,
+          });
         }
-    }   
-})
+        return true;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    },
+  },
+});
 
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST };

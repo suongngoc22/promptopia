@@ -1,5 +1,4 @@
 import { connectToDB } from "@utils/database";
-import { connection } from "mongoose";
 import Prompt from "@models/prompt";
 
 export const POST = async (req) => {
